@@ -1,0 +1,192 @@
+<MainWid>:
+    canvas:
+        Color:
+            rgb:1,1,1
+        Rectangle:
+            pos:self.pos
+            size:self.size
+
+
+
+<MyGridLayout>
+    #:import ZBarCam kivy_garden.zbarcam.ZBarCam 
+    #:import ZBarSymbol pyzbar.pyzbar.ZBarSymbol 
+    
+    orientation:'vertical'
+    canvas:
+        Color:
+            rgb:0.3,0.3,0.9
+        Rectangle:
+            pos:self.pos
+            size:self.size
+
+
+    BoxLayout: 
+        size:root.width, root.height 
+        id:zbar
+        orientation: 'vertical' 
+        zbarcam:zbarcam
+        ZBarCam: 
+
+            id: zbarcam 
+
+            # optional, by default checks all types 
+
+            code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13 
+
+        Label: 
+
+            id: name_label
+            
+
+            size_hint: None, None 
+
+            size: self.texture_size[0], 50 
+
+            text: ', '.join([str(symbol.data) for symbol in zbarcam.symbols]) 
+
+        Label: 
+
+            id: registro
+
+            size_hint: None, None 
+
+            size: self.texture_size[0], 50 
+
+            text: 
+
+            
+        Button:
+            id:registrar
+            text: 'registrar'
+            on_press: root.leer()
+
+        Button:
+            id: scanqr
+            text: 'Scan Qr'
+            on_press: root.escanear()
+
+
+<StartWid>:
+    orientation:'vertical'
+    canvas:
+        Color:
+            rgb:0.3,0.3,0.9
+        Rectangle:
+            pos:self.pos
+            size:self.size
+    BoxLayout:
+        padding:[20,20,20,20]
+        spacing: 5
+        size_hint_y: 0.7  
+    Button:
+        
+        size_hint_y: 0.1
+        text: "Registrar"
+        on_press:root.create_database()
+    Button:
+        
+        size_hint_y: 0.1
+        text: "Leer"
+        on_press:root.qr_cliente()
+
+    BoxLayout:
+        size_hint_y: 0.2
+
+<MessagePopup>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            id: message
+            size_hint: 1,0.8
+            text: ''
+        Button:
+            size_hint: 1,0.2
+            text: 'Regresar'
+            on_press: root.dismiss()
+
+
+
+
+<LeftLabel@Label>:
+    text_size: self.size
+    halign: 'left'
+
+<Registro>:
+    font_size: self.height*0.5
+    text: 'Registrar'
+    on_press: self.create_new_producto()
+
+#nombre del widget que queremos modifciar
+<DataBaseWid>:
+    canvas:
+        Color:
+            rgb:0.3,0.3,0.9
+        Rectangle:
+            pos:self.pos
+            size:self.size
+    Label: # ---------- ID
+        text: ' ID:'
+<InsertDataWid>:
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgb: 0.2,0.2,0.2
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    LeftLabel: # ---------- ID
+        text: ' ID:'
+    TextInput:
+        id: ti_id
+        multiline: False
+        hint_text: 'ID'
+    LeftLabel: # ---------- Nombre
+        text: ' Nombre:'
+    TextInput:
+        id: ti_nombre
+        multiline: False
+        hint_text: 'Nombre'
+
+    BoxLayout:
+        size_hint_y: 5
+    BoxLayout: # ---------- Crear Salir
+        Button:
+            text: 'Crear'
+            on_press: root.datos()
+        Button:
+            text: 'Salir'
+            on_press: root.back_to_dbw()
+
+    
+<Productos>:
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgb: 0.2,0.2,0.2
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    LeftLabel: # ---------- ID
+        text: ' Cloro Jabonoso:'
+    TextInput:
+        id: cloro_jabonoso
+        multiline: False
+        hint_text: 'ml'
+    LeftLabel: # ---------- Nombre
+        text: ' Desinfetante:'
+    TextInput:
+        id: desinfectante
+        multiline: False
+        hint_text: 'ml'
+
+    BoxLayout:
+        size_hint_y: 5
+    BoxLayout: # ---------- Completar- Salir
+        Button:
+            text: 'Completar'
+            on_press: root.completar()
+        Button:
+            text: 'Salir'
+            on_press: root.salir()
+
